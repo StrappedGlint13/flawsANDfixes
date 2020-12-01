@@ -4,25 +4,30 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 from .models import Question, Choice
 
 
-class IndexView(generic.ListView):
+class IndexView(LoginRequiredMixin, generic.ListView):
+    login_url = '/login/'
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
 
     def get_queryset(self):
-        """Return the last five published questions."""
         return Question.objects.order_by('-pub_date')[:5]
 
 
-class DetailView(generic.DetailView):
+class DetailView(LoginRequiredMixin, generic.DetailView):
+    login_url = '/login/'
     model = Question
     template_name = 'polls/detail.html'
 
-
-class ResultsView(generic.DetailView):
+#For admin only
+class ResultsView(LoginRequiredMixin, generic.DetailView):
+    login_url = '/login/'
     model = Question
     template_name = 'polls/results.html'
 
@@ -38,4 +43,5 @@ def vote(request, question_id):
     else:
         selected_choice.votes += 1
         selected_choice.save()
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+        messages.info(request, 'Thank you for your vote!')
+        return HttpResponseRedirect(reverse('polls:index'))
