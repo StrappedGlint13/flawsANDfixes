@@ -9,19 +9,22 @@
     <title>Polls</title>
   </head>
   <body>
-    <th style="text-align:left">Username: <td>{{user.username}}
+    <th style="text-align:left">Logged user: <td>{{user.username}}
       <h1>Welcome to poll app!</h1> 
-    {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <strong{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</strong>
-    {% endfor %}
-</ul>
-{% endif %}
+      {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <strong{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</strong>
+            {% endfor %}
+        </ul>
+      {% endif %}
+      <h2>Three (3) latest polls:</h2> 
     {% if latest_question_list %}
-    {% for question in latest_question_list %}
-            <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
-    {% endfor %}
+      {% for question in latest_question_list %}
+              <div>
+                <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
+              </div>
+      {% endfor %}
     {% else %}
     <p>No polls are available.</p>
     {% endif %}
