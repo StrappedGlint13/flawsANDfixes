@@ -13,7 +13,7 @@ import sqlite3
 
 #Method for setting the limit
 def set_limit():
-	return 3
+    return 3
 
 class IndexView(LoginRequiredMixin, generic.ListView):
     login_url = '/login/'
@@ -22,7 +22,7 @@ class IndexView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return Question.objects.raw("SELECT * FROM src_question ORDER BY pub_date DESC LIMIT '%s'" % (set_limit()))
-        
+
 class DetailView(LoginRequiredMixin, generic.DetailView):
     login_url = '/login/'
     model = Question
