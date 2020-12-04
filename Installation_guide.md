@@ -1,6 +1,6 @@
 # Installation guide
 
-This is guide for install and run the application in your computer. Remember, that it is full of vulnerabilities, hence it's at your own responsibility to use it! This installation guide assumes that you have Python (3.5 or later) and Django installed. If not, [here](https://cybersecuritybase.mooc.fi/installation-guide) you can check installation instructions. 
+This is a guide for install and run the application in your computer. Remember, that it is full of vulnerabilities, hence it's at your own responsibility to use it! This installation guide assumes that you have Python (3.5 or later) and Django installed. If not, [here](https://cybersecuritybase.mooc.fi/installation-guide) you can check installation instructions. 
 
 ## Clone the app to your computer 
 
@@ -10,7 +10,7 @@ Clone the app from Github to your local folder with the command:
 
 ## Use the app
 
-Go to your folder where you cloned the app. Then go to first "app"-folder. There is file named "manage.py". Run:
+Go to your folder where you cloned the app. Then go to first "app"-folder. There is a file named "manage.py". Run:
 
 `python3 manage.py runserver`
 
