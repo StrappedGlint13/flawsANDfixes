@@ -9,7 +9,7 @@
     <title>Polls</title>
   </head>
   <body>
-    <th style="text-align:left">Logged user: <td>{{user.username}}
+    <th style="text-align:left">Logged user: <td>{{user.username|safe}}
       <h1>Welcome to poll app!</h1> 
       {% if messages %}
         <ul class="messages">
