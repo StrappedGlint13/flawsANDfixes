@@ -15,5 +15,5 @@ This is a final project of the Cyber Security Base 2020 -course by University of
 
 ## Report about the flaws and how to fix'em
 
-[Report]()
+[Report](https://github.com/StrappedGlint13/flawsANDfixes/blob/main/Report.md)
 
