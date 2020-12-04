@@ -14,10 +14,10 @@ Login is required for all the views that should renders after logging in. This i
 
 How to fix the access control? The flaw can be fixed with proper validation:
 
-“Login_required” from “django.contrib.auth.decorators” would firstly check that the user is logged in (This is in the app already)
-Once user has logged in, user can be requested from the browser. 
-There is field like  “is_staff” in the “auth_user” -datatable that implies, if the user is admin. This field should be checked and compared with the current user in the code of ResultsView (and admin panel).
-There could also be some error handling, if one tries to access direclty to ‘http://127.0.0.1:8000/polls/1/results/’ and is not admin.
+- “Login_required” from “django.contrib.auth.decorators” would firstly check that the user is logged in (This is in the app already).
+- Once user has logged in, user can be requested from the browser. 
+- There is field like  “is_staff” in the “auth_user” -datatable that implies, if the user is admin. This field should be checked and compared with the current user in the code of ResultsView (and admin panel).
+- There could also be some error handling, if one tries to access direclty to ‘http://127.0.0.1:8000/polls/1/results/’ and is not admin.
 
 ## FLAW 2: Broken Authentication & Sensitive data exposure. 
 
@@ -25,15 +25,15 @@ Admins password is very poor. The app will accept poor passwords. Using any fuzz
 
 Here are the phases how to hack admins poor password:
 
-First load a list of possible canditates from SecLists to your program.
-Use/write a program that uses a canditatelist to fuzz the password.
-Write a method that extracts the csrfmiddleware-token from the target address: /admin/login/?next=/admin’.
-Post the candidates one by one with the extracted token.
-Check if you are at the site with the response. If so, the password has been found.
+- First load a list of possible canditates from SecLists to your program.
+- Use/write a program that uses a canditatelist to fuzz the password.
+- Write a method that extracts the csrfmiddleware-token from the target address: /admin/login/?next=/admin’.
+- Post the candidates one by one with the extracted token.
+- Check if you are at the site with the response. If so, the password has been found.
 
-How to fix broken authentication? Firstly, Admin should use better passwords. According Dan Cornell’s, Paul Carugati’s and James Lyne’s talk shows at the TED (part 1), the best way to secure yourself is know the basics. Carugati pointed out that passwords should be longer instead of short and complex. For example ‘SUNcarCYBERliongate’ is better password than ‘12k<pSA!@’.
+How to fix broken authentication? *Firstly*, Admin should use better passwords. According Dan Cornell’s, Paul Carugati’s and James Lyne’s talk shows at the TED (part 1), the best way to secure yourself is know the basics. Carugati pointed out that passwords should be longer instead of short and complex. For example ‘SUNcarCYBERliongate’ is better password than ‘12k<pSA!@’.
 
-Secondly, there could be also implemented some generator to lock the user if the password is set x times (e.g. 5?) incorrect. Also there should be implemented some password validators to tell the user if the password is bad. This can be done by setting to settings.py-file “AUTH_PASSWORD_VALIDATORS” and using “django.contrib.auth.password_validation” -library. 
+*Secondly*, there could be also implemented some generator to lock the user if the password is set x times (e.g. 5?) incorrect. Also there should be implemented some password validators to tell the user if the password is bad. This can be done by setting to settings.py-file “AUTH_PASSWORD_VALIDATORS” and using “django.contrib.auth.password_validation” -library. 
 
 ## FLAW 3: Injection
 
