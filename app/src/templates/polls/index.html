@@ -10,6 +10,7 @@
   </head>
   <body>
     <th style="text-align:left">Logged user: <td>{{user.username|safe}}
+      <p><a href="/logout/">Log Out</a></p>
       <h1>Welcome to poll app!</h1> 
       {% if messages %}
         <ul class="messages">
@@ -29,6 +30,6 @@
     <p>No polls are available.</p>
     {% endif %}
   </body>
-  <br></br> <br></br> <br></br>
+  <br></br>
   <img src=https://upload.wikimedia.org/wikipedia/commons/9/9a/Divided_We_Fall.jpg width="500" height="500">
-</html>
+  </html>
