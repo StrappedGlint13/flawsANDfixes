@@ -14,13 +14,17 @@ Go to your folder where you cloned the app. Then go to first "app"-folder. There
 
 `python3 manage.py runserver`
 
-You can use test user to login with:
+You can use test/admin user to login with:
 
+### Admin user:
 -   Username: admin
 -   Password: 123456789
 
-## Missing functionalities
+### test user:
+-   Username: test
+-   Password: test
 
-### Logout
+With admin user you can check the votes results by setting url directly:
 
-Type `/logout` at the main view to the url. 
+`http://127.0.0.1:8000/polls/1/results/`
+

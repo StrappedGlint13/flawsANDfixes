@@ -4,6 +4,8 @@
 
 This is a final project of the Cyber Security Base 2020 -course by University of Helsinki. **The application is full of different kind of flaws, and it's highly recommended not to use it.**
 
+[Installation guide](https://github.com/StrappedGlint13/flawsANDfixes/blob/main/Installation_guide.md)
+
 ## Detected flaws
 
 -   Broken Access Control

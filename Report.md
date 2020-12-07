@@ -2,7 +2,7 @@
 
 ### Github:
 
-[repo](https://github.com/StrappedGlint13/flawsANDfixes)
+[Repo](https://github.com/StrappedGlint13/flawsANDfixes)
 
 ### Installation instructions:
 
@@ -10,51 +10,52 @@
 
 ## FLAW 1: Broken Access Control & Sensitive data exposure.
 
-Login is required for all the views that should renders after logging in. This is not enough as  in the app, the results should not been seen to all the users. Only admin should handle and analyze the results of the polls. At the moment, any user can just type (locally) ‘http://127.0.0.1:8000/polls/1/results/’ directly to the url path and get the results. Same thing also with the admin panel. There is existing serious lack of validation. 
+The results should not been seen to all the users. Only admin should handle and analyze the results of the polls. At the moment, any user can just type (locally). ‘http://127.0.0.1:8000/polls/1/results/’ directly to the url path and get the results.
 
 How to fix the access control? The flaw can be fixed with proper validation:
 
 - “Login_required” from “django.contrib.auth.decorators” would firstly check that the user is logged in (This is in the app already).
-- Once user has logged in, user can be requested from the browser. 
-- There is field like  “is_staff” in the “auth_user” -datatable that implies, if the user is admin. This field should be checked and compared with the current user in the code of ResultsView (and admin panel).
-- There could also be some error handling, if one tries to access direclty to ‘http://127.0.0.1:8000/polls/1/results/’ and is not admin.
+- Once the user has logged in, user can be requested from the browser. 
+- There is a field such as  “is_staff” in the “auth_user” -datatable that implies, if the user is an admin. This field should be checked and compared with the current user in the code of ResultsView (and admin panel).
+- There could also be some error handling, if one tries to access directly to ‘http://127.0.0.1:8000/polls/1/results/’ and is not an admin.
 
 ## FLAW 2: Broken Authentication & Sensitive data exposure. 
 
-Admins password is very poor. The app will accept poor passwords. Using any fuzzing program will detect the password very quickly. This can be done using some fuzzer and lists from SecLists. The currenct admin password is almost every list that has been created on SecLists, for example in xato-net-10-million-passwords.txt the current password is on the fifth place at the list. 
+Admins password is very poor as the application will accept poor passwords. Using any fuzzing program will detect the password very quickly. This can be done using some fuzzer and lists from SecLists. The currenct admin password is in almost every list that has been created on SecLists, for example in xato-net-10-million-passwords.txt the current password is on the fifth place at the list. 
 
-Here are the phases how to hack admins poor password:
+Here are the phases how to hack admins a poor password:
 
 - First load a list of possible canditates from SecLists to your program.
-- Use/write a program that uses a canditatelist to fuzz the password.
+- Use/write a program that uses a canditate list to fuzz the password.
 - Write a method that extracts the csrfmiddleware-token from the target address: /admin/login/?next=/admin’.
 - Post the candidates one by one with the extracted token.
 - Check if you are at the site with the response. If so, the password has been found.
 
 How to fix broken authentication? *Firstly*, Admin should use better passwords. According Dan Cornell’s, Paul Carugati’s and James Lyne’s talk shows at the TED (part 1), the best way to secure yourself is know the basics. Carugati pointed out that passwords should be longer instead of short and complex. For example ‘SUNcarCYBERliongate’ is better password than ‘12k<pSA!@’.
 
-*Secondly*, there could be also implemented some generator to lock the user if the password is set x times (e.g. 5?) incorrect. Also there should be implemented some password validators to tell the user if the password is bad. This can be done by setting to settings.py-file “AUTH_PASSWORD_VALIDATORS” and using “django.contrib.auth.password_validation” -library. 
+*Secondly*, there could also be some generator implemented to lock the user if the password is set x times (e.g. 5?) incorrect. Also there should be some password implemented validators to tell the user if the password is weak. This can be done by setting to settings.py-file “AUTH_PASSWORD_VALIDATORS” and using “django.contrib.auth.password_validation” -library. 
 
 ## FLAW 3: Injection
 
-There has been implemented very poor method “set_limit()” with unsanitized data. The idea of the method is simply set the limit for the latest polls, that the program owner / developer wants to show (No user interface added). The SQL-injection is at the SQL-query parameter as the parameter is this quite useless method mentioned above. Benefits of this method is also quite a low as it could be written in much more straightworward manner, but the costs as a vulnerability could be much bigger.  
+A very poor method has been implemented “set_limit()” with unsanitized data. The idea of the method is simply to set the limit for the latest polls, that the program owner / developer wants to show (No user interface added). The SQL-injection is at the SQL-query parameter as the parameter is this quite useless method mentioned above. Benefits of this method are also quite a low as it could be written in much more straightforward manner, but the costs as a vulnerability could be much bigger.  
 
-Because there is query parameter at the views, this allows possible attacker to access the database via the return clause that has been given in the poor method. Thus, the attacker can use SQL-operations like UNION with “‘“ marks and return whatever he/she wants. For example passwords or other sensitive data. This flaw also make it possible to destroy every polls that exisists in the database with “DROP TABLE” -SQL-commands. 
+Because there is query parameter at the views, this allows possible attacker to access the database via the return clause that has been given in the poor method. Thus, the attacker can use SQL-operations like _UNION_ with “‘“ marks and return whatever he/she wants. For example passwords or other sensitive data. This flaw also make it possible to destroy every polls that exisists in the database with _“DROP TABLE”_ -SQL-commands. 
 
-How to fix the injection? Django provides querysets that keep the SQL-code separately from the query’s parameters. If one like to use raw-queries, in this case, one can remove the kind-of-useless method, set a local variable into the IndexView and change the parameter method to the variable. 
+How to fix the injection? Django provides query sets that keep the SQL-code separately from the query’s parameters. If one like to use raw-queries, in this case, one can remove the kind-of-useless method, set a local variable into the IndexView and change the parameter method to the variable. 
         
 ## FLAW 4: Security misconfiguration
 
-Setting.py file contains a couple misconfiguration flaws. SECREY_KEY is public (in Github). It is used to provide “cryptographic signing” according django documentation and it is randomly generated by Django in every project. Also the debugger is set ‘True’ as it should never be turned on, when the application is deployed in production. When the debugger is on, it will give metadata of the environment and also strain the memory by remembering all the SQL queries that has been made. 
+Setting.py file contains a couple misconfiguration flaws. _SECREY_KEY_ is public (in Github). It is used to provide “cryptographic signing” according to django documentation and it is randomly generated by Django in every project. Also the debugger is set ‘True’ as it should never be turned on, when the application is deployed in production. When the debugger is on, it will give metadata of the environment and also strain the memory by remembering all the SQL queries that has been made. 
 
-Even if the debugger is set ‘False’, at the moment ALLOWED_HOSTS is set with ‘*’. This means that will match any HTTP Host header that leads to conclusion that the app is open for attacks like Cross-Site Request Forgery or poisoning. ALLOWED_HOSTS field is there for validating the names of request’s Host headers, so that the app won’t accept any given Host header. 
+Even if the debugger is set ‘False’, at the moment _ALLOWED_HOSTS_ is set with ‘*’. This means that will match any HTTP Host header that leads to conclusion that the app is open for attacks like Cross-Site Request Forgery or poisoning. _ALLOWED_HOSTS_ field is there for validating the names of request’s Host headers, so that the app won’t accept any given Host header. 
 
-How to fix the configuration? Secret key should be placed somewhere safe, for example config.json or environment file and then put the secret file into .gitignore, so that the secret_key is for private eyes only. Debugger should be turned off into ‘false’ before deploying the app to production, so that it won’t make traceback to metadata. In addition, allowed hosts should be set properly, because the table can’t be empty or accpeting all requests, if the debugger is set ‘false’. 
+How to fix the configuration? Secret key should be placed somewhere safe, for example config.json or environment file and then put the secret file into .gitignore, so that the secret_key is for private eyes only. Debugger should be turned off into ‘false’ before deploying the app to production, so that it doesn’t make traceback to metadata. In addition, allowed hosts should be set properly, because the table can’t be empty or accpeting all requests, if the debugger is set to ‘false’. 
 
 ++ There is also database in the public view (Github). This is not a good pratice at all, and it should be in the .gitignore. 
 
 ## FLAW 5: Cross-Site Scripting XSS
 
-There has been added an image with absolute path (licensed image with creative commons) in the index.html. It is open for XSS-attacks, because the src-attricute is not encapsulated with quotes. Django has XSS protection, but it won’t escpate the input. There is possibility for example to write script there, steal the cookie and set the img, so that user won’t even notice that the cookie has gone to the wrong hands. There is also disabled Django’s automatic escaping of variable username using ‘safe’, which is also open for XXS-attack.
+An image has been added with absolute path (licensed image with creative commons) in the index.html. It is open for *XSS-attacks*, because the src-attricute is not encapsulated with quotes. Django has *XSS protection*, but it won’t escpate the input. There is possibility for example to write script there, steal the cookie and set the img, so that user won’t even notice that the cookie has gone to the wrong hands.  Django’s automatic escaping of variable username using ‘safe’is being disabled, which is also open for *XXS-attack*.
 
-This can be fixed by quoting the src-attribute. By enabling the automatic escape (removing ‘safe’), would also let Django block the possible XXS-attack. In addition it is bad practice to use absolute path, because if the path changes or the image is removed, the image will disapper also from the website. Image should be saved in the application and then used with relative paths. 
+This can be fixed by quoting the src-attribute. By enabling the automatic escape (removing ‘safe’), would also let Django block the possible *XXS-attack*. In addition it is bad practice to use absolute path, because if the path changes or the image is removed, the image will disapper also from the website. Image should be saved in the application and then used with relative paths. 
+
